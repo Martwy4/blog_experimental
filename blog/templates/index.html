@@ -2,10 +2,32 @@
 
 {% block content %}
 
+<h1>Posty</h1>
 
 {% for post in posts %}
-<h2>{{ post.title }}</h2>
-<p>{{ post.content }}</p>
+
+<div class="card mb-3">
+    <div class="card-body">
+
+        <h3>{{ post.title }}</h3>
+        <p class="text-muted">
+        Opublikowano: {{ post.created_at.strftime('%d.%m.%Y') }}
+        </p>
+        <p>{{ post.content[:200] }}...</p>
+
+        <a href="/edit-post/{{ post.id }}" class="btn bg-primary">
+            Edytuj
+        </a>
+
+        <form action="/delete-post/{{ post.id }}" method="POST" style="display:inline;">
+            <button class="btn bg-light">
+                Usuń
+            </button>
+        </form>
+
+    </div>
+</div>
+
 {% endfor %}
 
 {% endblock %}
