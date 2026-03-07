@@ -12,38 +12,23 @@ def homepage():
     posts = Post.query.order_by(Post.created_at.desc()).all()
     return render_template("index.html", posts=posts)
 
-
 @bp.route("/new-post", methods=["GET", "POST"])
-def new_post():
-    form = PostForm()
+@bp.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
+def post_form(post_id=None):
+    post = Post.query.get_or_404(post_id) if post_id else Post()
+    form = PostForm(obj=post)
 
     if form.validate_on_submit():
-        post = Post(
-            title=form.title.data,
-            content=form.content.data
-        )
+        form.populate_obj(post)
 
         db.session.add(post)
         db.session.commit()
 
         return redirect(url_for("main.homepage"))
 
-    return render_template("new_post.html", form=form)
+    template = "edit_post.html" if post_id else "new_post.html"
+    return render_template(template, form=form)
 
-@bp.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-def edit_post(post_id):
-    post = Post.query.get_or_404(post_id)
-    form = PostForm(obj=post)
-
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-
-        db.session.commit()
-
-        return redirect(url_for("main.homepage"))
-
-    return render_template("edit_post.html", form=form)
 
 @bp.route("/delete-post/<int:post_id>", methods=["POST"])
 def delete_post(post_id):
