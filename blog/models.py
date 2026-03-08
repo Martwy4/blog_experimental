@@ -10,6 +10,8 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    is_published = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"<Post {self.title}>"
