@@ -16,7 +16,13 @@
         {{ form.content.label }}
         {{ form.content(class="form-control", rows=6) }}
     </div>
+    
+    <div class="form-check">
+    {{ form.is_published(class="form-check-input") }}
+    {{ form.is_published.label(class="form-check-label") }}
+    
 
+    </div>
     {{ form.submit(class="btn btn-primary") }}
 
 </form>

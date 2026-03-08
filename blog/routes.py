@@ -4,8 +4,10 @@ from blog.forms import PostForm
 from flask import Blueprint
 from flask import render_template, request, session, flash, redirect, url_for
 from blog.forms import LoginForm
-
 import functools
+from blog.models import db
+
+
 
 def login_required(view_func):
    @functools.wraps(view_func)
@@ -14,7 +16,6 @@ def login_required(view_func):
            return view_func(*args, **kwargs)
        return redirect(url_for('main.login', next=request.path))
    return check_permissions
-
 
 bp = Blueprint("main", __name__)
 
@@ -73,3 +74,10 @@ def logout():
        session.clear()
        flash('You are now logged out.', 'success')
    return redirect(url_for('main.homepage'))
+
+"""
+@bp.route("/drafts/", methods=['GET'])
+@login_required
+def list_drafts():
+   drafts = Entry.query.filter_by(is_published=False).order_by(Entry.pub_date.desc())
+   return render_template("drafts.html", drafts=drafts)"""
